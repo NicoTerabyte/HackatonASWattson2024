@@ -7,3 +7,23 @@ client = AzureOpenAI(
   azure_endpoint = "https://asw-poc-shared-aoai.openai.azure.com/"
 )
 #implement the chatbot
+response = client.chat.completions.create(
+    model="gpt-",
+    messages=[
+        { "role": "system", "content": "You are a helpful assistant." },
+        { "role": "user", "content": [
+            {
+                "type": "text",
+                "text": "Describe this picture:"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "<image URL>"
+                }
+            }
+        ] }
+    ],
+    max_tokens=2000
+)
+print(response)
