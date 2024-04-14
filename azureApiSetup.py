@@ -1,18 +1,28 @@
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+
 import time
+from pathlib import Path
 from typing import Iterable
 from openai import AzureOpenAI
+from openai.types import FileObject
 from openai.types.beta.threads.text_content_block import TextContentBlock
 from openai.types.beta.threads.messages import MessageFile
 
+load_dotenv()
+
 should_cleanup: bool = True
+
+api_key = os.getenv("OPENAI_KEY")
+api_endpoint = os.getenv("OPENAI_URI")
+api_version = os.getenv("OPENAI_VERSION")
 
 # Create Client
 client = AzureOpenAI(
-  api_key = "ede9ceac74d646c2ad904bf51a4bb715",
-  api_version = "2024-02-15-preview",
-  azure_endpoint = "https://ai-riders2932149880941.openai.azure.com/"
+  api_key = api_key,
+  api_version = api_version,
+  azure_endpoint = api_endpoint,
 )
 
 # Create Assistant
@@ -27,6 +37,28 @@ assistant = client.beta.assistants.create(
 
 # Create thread
 thread = client.beta.threads.create()
+
+'''
+# Upload files to the assistant from the data folder
+DATA_FOLDER = "data/"
+ai_files = []
+
+def upload_file(client: AzureOpenAI, path: str) -> FileObject:
+    print(path)
+    with Path(path).open("rb") as f:
+        return client.files.create(file=f, purpose="assistants")
+
+arr = os.listdir(DATA_FOLDER)
+assistant_files = []
+for file in arr:
+    filePath = DATA_FOLDER + file
+    assistant_file = upload_file(client, filePath)
+    ai_files.append(assistant_file)
+    assistant_files.append(assistant_file)
+
+file_ids = [file.id for file in assistant_files]
+file_ids
+'''
 
 # read the assistant file
 def read_assistant_file(file_id:str):
