@@ -38,28 +38,6 @@ assistant = client.beta.assistants.create(
 # Create thread
 thread = client.beta.threads.create()
 
-'''
-# Upload files to the assistant from the data folder
-DATA_FOLDER = "data/"
-ai_files = []
-
-def upload_file(client: AzureOpenAI, path: str) -> FileObject:
-    print(path)
-    with Path(path).open("rb") as f:
-        return client.files.create(file=f, purpose="assistants")
-
-arr = os.listdir(DATA_FOLDER)
-assistant_files = []
-for file in arr:
-    filePath = DATA_FOLDER + file
-    assistant_file = upload_file(client, filePath)
-    ai_files.append(assistant_file)
-    assistant_files.append(assistant_file)
-
-file_ids = [file.id for file in assistant_files]
-file_ids
-'''
-
 # read the assistant file
 def read_assistant_file(file_id:str):
     response_content = client.files.content(file_id)
@@ -89,19 +67,6 @@ def print_messages(messages: Iterable[MessageFile]) -> None:
                         file_id = annotation.file_path.file_id
                         content = read_assistant_file(file_id)
                         print(f"Annotation Content:\n{str(content)}\n")
-            '''
-            elif isinstance(item, ImageFileContentBlock):
-                # Retrieve image from file id
-                data_in_bytes = read_assistant_file(item.image_file.file_id)
-                # Convert bytes to image
-                readable_buffer = io.BytesIO(data_in_bytes)
-                image = Image.open(readable_buffer)
-                # Resize image to fit in terminal
-                width, height = image.size
-                image = image.resize((width // 2, height // 2), Image.LANCZOS)
-                # Display image
-                image.show()
-            '''
 
 def process_prompt(prompt: str) -> None:
     client.beta.threads.messages.create(thread_id=thread.id, role="user", content=prompt)
@@ -143,7 +108,45 @@ def process_prompt(prompt: str) -> None:
 
 # Problem/Question of the user
 print(process_prompt("My skin got a little irritated, what product you suggest to make it less irritated?"))
+print(process_prompt("I have acne and I want to get rid of it, what ?"))
 
 if should_cleanup:
     client.beta.assistants.delete(assistant.id)
     client.beta.threads.delete(thread.id)
+
+'''
+# Upload files to the assistant from the data folder // at this moment not applicable
+DATA_FOLDER = "data/"
+ai_files = []
+
+def upload_file(client: AzureOpenAI, path: str) -> FileObject:
+    print(path)
+    with Path(path).open("rb") as f:
+        return client.files.create(file=f, purpose="assistants")
+
+arr = os.listdir(DATA_FOLDER)
+assistant_files = []
+for file in arr:
+    filePath = DATA_FOLDER + file
+    assistant_file = upload_file(client, filePath)
+    ai_files.append(assistant_file)
+    assistant_files.append(assistant_file)
+
+file_ids = [file.id for file in assistant_files]
+file_ids
+'''
+
+'''
+# elif stmt to display images
+elif isinstance(item, ImageFileContentBlock):
+    # Retrieve image from file id
+    data_in_bytes = read_assistant_file(item.image_file.file_id)
+    # Convert bytes to image
+    readable_buffer = io.BytesIO(data_in_bytes)
+    image = Image.open(readable_buffer)
+    # Resize image to fit in terminal
+    width, height = image.size
+    image = image.resize((width // 2, height // 2), Image.LANCZOS)
+    # Display image
+    image.show()
+'''
