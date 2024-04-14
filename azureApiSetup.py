@@ -28,7 +28,7 @@ client = AzureOpenAI(
 # Create Assistant
 assistant = client.beta.assistants.create(
     name="AI Beauty coach/advisor",
-    instructions=f"You are a helpful AI beauty assistant, which knows perfectly the products dataset"
+    instructions=f"You are a helpful beauty assistant, which knows perfectly the products dataset"
     f"Be free to connect emotionally with customers, which are most likely Gen Z and Gen Alpha"
     f"So you need to know their behaviour to make them recommendations",
     tools=[{"type": "code_interpreter"}],
