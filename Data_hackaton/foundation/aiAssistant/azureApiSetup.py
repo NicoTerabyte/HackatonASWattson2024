@@ -9,6 +9,7 @@ client = AzureOpenAI(
   api_version = "2024-02-15-preview",
   azure_endpoint = "https://ai-riders2932149880941.openai.azure.com/"
 )
+<<<<<<< HEAD
 
 assistant = client.beta.assistants.create(
     name="Riders",
@@ -72,3 +73,26 @@ while run.status != 'completed':
     counter += 1
     time.sleep(5)
 
+'''
+#implement the chatbot
+response = client.chat.completions.create(
+    model="gpt-",
+    messages=[
+        { "role": "system", "content": "You are a helpful assistant." },
+        { "role": "user", "content": [
+            {
+                "type": "text",
+                "text": "Describe this picture:"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "<image URL>"
+                }
+            }
+        ] }
+    ],
+    max_tokens=2000
+)
+print(response)
+'''
