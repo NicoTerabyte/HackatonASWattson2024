@@ -29,7 +29,7 @@ client = AzureOpenAI(
 assistant = client.beta.assistants.create(
     name="AI Beauty coach/advisor",
     instructions=f"You are a helpful beauty assistant, which knows perfectly the products dataset"
-    f"Be free to connect emotionally with customers, which are most likely Gen Z and Gen Alpha"
+    f"Be free to connect emotionally with customers, which are most likely Gen Z and Gen Y"
     f"So you need to know their behaviour to make them recommendations",
     tools=[{"type": "code_interpreter"}],
     model="gpt-4"
@@ -107,8 +107,13 @@ def process_prompt(prompt: str) -> None:
             time.sleep(5)
 
 # Problem/Question of the user
-print(process_prompt("My skin got a little irritated, what product you suggest to make it less irritated?"))
-print(process_prompt("I have acne and I want to get rid of it, what ?"))
+print("Welcome to the AI Beauty Coach/Advisor\nHow can I help you today?")
+question = input("Type your question or problem:\n")
+print("Processing ...")
+print("Question: ", question)
+
+# print(process_prompt("My skin got a little irritated, what product you suggest to make it less irritated?"))
+# print(process_prompt("I have acne and I want to get rid of it, what ?"))
 
 if should_cleanup:
     client.beta.assistants.delete(assistant.id)
